@@ -1,12 +1,14 @@
 import { React, useCallback, useState, useRef, useEffect } from "react";
-import { connect } from "react-redux";
-import { get_my_position } from "../actions/position/positionAction";
+import { connect, useDispatch } from "react-redux";
+import { getMyPosition } from "../actions/position/positionAction";
+import { getAllSpots } from "../actions/spots/spotAction";
 import {
   GoogleMap,
   useLoadScript,
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
+import myPos from "../assets/mypos.png";
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -29,21 +31,27 @@ const Map = (props) => {
     libraries,
   });
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    dispatch(getAllSpots());
+    setMarkers(props.spots.spots);
+
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         let coords = {
           lat: parseFloat(position.coords.latitude),
           lng: parseFloat(position.coords.longitude),
         };
-        console.log("COORDS from components / Map.js", coords);
         setCenter(coords);
-        props.get_my_position(coords);
+        props.getMyPosition(coords);
       });
     } else {
       console.log("Ton navigateur ne supporte pas la géolocalisation");
     }
   }, []);
+
+  console.log("MARKERSSS", markers);
 
   // FONCTION QUI PERMET D'AJOUTER UN PIN SUR LA MAP
   // const onMapClick = useCallback((event) => {
@@ -61,8 +69,8 @@ const Map = (props) => {
     mapRef.current = map;
   }, []);
 
-  if (loadError) return "Error loading map";
-  if (!isLoaded) return "Loading Maps!";
+  if (loadError) return "Erreur pendant le chargement";
+  if (!isLoaded) return "Chargement de la Map";
 
   return (
     <GoogleMap
@@ -74,31 +82,35 @@ const Map = (props) => {
       // onClick={onMapClick}
       onLoad={onMapLoad}
     >
-      <Marker
-        position={center}
-        // icon={}
-      />
+      <Marker position={center} icon={myPos} />
 
       {markers.map((marker, idx) => (
         <Marker
           key={idx}
-          position={{ lat: marker.lat, lng: marker.lng }}
+          position={{
+            lat: marker.location.coordinates[0],
+            lng: marker.location.coordinates[1],
+          }}
           onClick={() => {
             setSelected(marker);
+            console.log(selected);
           }}
         />
       ))}
-
       {selected ? (
         <InfoWindow
-          position={{ lat: selected.lat, lng: selected.lng }}
+          position={{
+            lat: selected.location.coordinates[0],
+            lng: selected.location.coordinates[1],
+          }}
           onCloseClick={() => {
             setSelected(null);
           }}
         >
-          <div>
-            <h1>Hey</h1>
-            <p></p>
+          <div className="info-window">
+            <h1>{selected.name}</h1>
+            <h2>catégorie: {selected.category}</h2>
+            <img id="spot-picture" src={selected.imageURL} alt={"spot"} />
           </div>
         </InfoWindow>
       ) : null}
@@ -106,8 +118,15 @@ const Map = (props) => {
   );
 };
 
-const mapDispatchToProps = {
-  get_my_position,
+const mapStateToProps = (store) => {
+  return {
+    spots: store.spots,
+  };
 };
 
-export default connect(null, mapDispatchToProps)(Map);
+const mapDispatchToProps = {
+  getMyPosition,
+  getAllSpots,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map);

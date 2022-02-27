@@ -58,12 +58,11 @@ const NavBar = (props) => {
           </Box>
           <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
             {props.user.isLogged ? (
-              <NavLink>Mon profile</NavLink>
+              <NavLink>Mon profil</NavLink>
             ) : (
               <NavLink>Connecte toi</NavLink>
             )}
             <NavLink>Ajoute un spot</NavLink>
-            <NavLink>Trouve un spot</NavLink>
           </HStack>
         </HStack>
       </Flex>

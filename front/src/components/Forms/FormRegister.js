@@ -27,7 +27,6 @@ export default function FormRegister() {
     };
 
     axios.post(config.api_url + "auth/user/register", data).then((response) => {
-      console.log("DATA", data);
       if (response.status === 200) {
         console.log("ok");
       }

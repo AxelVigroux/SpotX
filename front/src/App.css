@@ -5,4 +5,34 @@ body {
   background: #161e2e;
 }
 
+/* 
+#option {
+  background-color: #2d3748;
+} */
 
+
+.info-window {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center;
+  color: #2d3748;
+}
+
+.info-window h1 {
+  font-weight: 800;
+  font-size: 2rem;
+  max-width: 100%;
+}
+
+.info-window h2 {
+  font-weight: 700;
+  font-size: 1.5rem;
+  max-width: 100%;
+}
+
+#spot-picture {
+  display: flex;
+  margin: 0 auto;
+  max-width: 60%;
+}

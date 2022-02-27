@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { connect } from "react-redux";
 import { loginUser } from "../../utils/user";
-import { logged_in_user, user_get_position } from "../../actions/users/userAction";
+import {
+  logged_in_user,
+  user_get_position,
+} from "../../actions/users/userAction";
 import { useNavigate } from "react-router-dom";
 import {
   FormControl,
@@ -30,17 +33,13 @@ const FormLogin = (props) => {
 
     loginUser(data).then((response) => {
       if (response.status === 200) {
-        console.log("response data.user from LoginForm", response.data.user);
-        console.log("response data token", response.data.token)
         window.localStorage.setItem("user_token", response.data.token);
         props.logged_in_user(response.data.user);
-        props.user_get_position(props.position.coords)
+        props.user_get_position(props.position.coords);
         navigate("/");
       }
     });
   };
-
-
 
   return (
     <Stack spacing={4}>
@@ -92,7 +91,7 @@ const FormLogin = (props) => {
                   justify={"space-between"}
                 >
                   <Link
-                    to="/login"
+                    to="/register"
                     _hover={{
                       color: "primary.500",
                     }}
@@ -121,13 +120,13 @@ const FormLogin = (props) => {
 };
 const mapDispatchToProps = {
   logged_in_user,
-  user_get_position
+  user_get_position,
 };
 
 const mapStateToProps = (store) => {
   return {
     user: store.user,
-    position: store.position
+    position: store.position,
   };
 };
 

@@ -10,40 +10,33 @@ import {
   useColorModeValue,
   Heading,
   Select,
+  Image,
 } from "@chakra-ui/react";
-import axios from "axios";
-import { config } from "../../utils/config";
-import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
-import { fetchPhotos, openUploadWidget } from "../../utils/cloudinaryServices";
+import { CloudinaryContext } from "cloudinary-react";
+import { useNavigate } from "react-router-dom";
+import { saveSpot, updatePicture } from "../../utils/spot";
 
 const FormAddSpot = (props) => {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("street");
   const [location, setLocation] = useState([]);
   const [imageURL, setImageURL] = useState("");
-  const [images, setImages] = useState([]);
 
-  const token = window.localStorage.getItem("user_token");
+  let navigate = useNavigate();
 
   const checkUploadResult = (resultEvent) => {
-    console.log("RESULT EVENT", resultEvent);
     if (resultEvent.event === "success") {
       let data = {
         imageURL: resultEvent.info.secure_url,
         id: props.user.infos._id,
       };
-      axios
-        .post(config.api_url + "spot/picture", data, {
-          headers: { "x-access-token": token },
-        })
-        .then((response) => {
-          console.log(response);
+
+      updatePicture(data).then((response) => {
+        if (response.status === 200) {
           setImageURL(resultEvent.info.secure_url);
-          return response;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+          setLocation(props.position);
+        }
+      });
     }
   };
 
@@ -52,12 +45,11 @@ const FormAddSpot = (props) => {
       {
         cloudName: "du7ab0zzw",
         uploadPreset: "SpotX-preset",
-        maxImageWidth: 800,
-        cropping: false,
+        maxImageWidth: 600,
+        cropping: true,
         showAdvancedOptions: true,
       },
       (error, result) => {
-        console.log("checkUpload RESULT", result);
         checkUploadResult(result);
       }
     );
@@ -67,22 +59,17 @@ const FormAddSpot = (props) => {
   const onSubmitForm = () => {
     let data = {
       name: name,
-      // category: category,
-      // location: location,
+      category: category,
+      location: location,
       imageURL: imageURL,
       user_id: props.user.infos._id,
     };
 
-    axios
-      .post(config.api_url + "spot/add", data, {
-        headers: { "x-access-token": token },
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    saveSpot(data).then((response) => {
+      if (response.status === 201) {
+        navigate("/");
+      }
+    });
   };
 
   return (
@@ -94,20 +81,6 @@ const FormAddSpot = (props) => {
             onSubmitForm();
           }}
         >
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              showWidget();
-            }}
-          >
-            Upload Photo
-          </button>
-
-          <section>
-            {images.map((i, idx) => (
-              <img src={i} key={idx} alt="" />
-            ))}
-          </section>
           <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
             <Stack align={"center"}>
               <Heading fontSize={"4xl"} color="white">
@@ -119,6 +92,31 @@ const FormAddSpot = (props) => {
                 boxShadow={"lg"}
                 p={8}
               >
+                <FormControl id="upload-picture">
+                  {imageURL ? (
+                    <Box size={"lg"}>
+                      <Image src={imageURL} alt="upload picture"></Image>
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setImageURL("");
+                        }}
+                      >
+                        Supprimer la photo
+                      </Button>
+                    </Box>
+                  ) : (
+                    <Button
+                      border={"1px"}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        showWidget();
+                      }}
+                    >
+                      Ajoute une photo
+                    </Button>
+                  )}
+                </FormControl>
                 <FormControl id="name">
                   <FormLabel>Name</FormLabel>
                   <Input
@@ -129,15 +127,33 @@ const FormAddSpot = (props) => {
                     }}
                   />
                 </FormControl>
-                {/* <FormControl id="category">
-                <Select placeholder="Selectionne une catégorie">
-                  <option value="street">Street</option>
-                  <option value="courbe">Courbe</option>
-                  <option value="polyvalent">Polyvalent</option>
-                </Select>
-              </FormControl> */}
+                <FormControl id="category">
+                  <FormLabel>Catégorie</FormLabel>
 
+                  <Select
+                    id="option"
+                    bg={"gray"}
+                    onChange={(e) => {
+                      setCategory(e.currentTarget.value);
+                    }}
+                  >
+                    <option id="option" value="street">
+                      Street
+                    </option>
+                    <option id="option" value="courbe">
+                      Courbe
+                    </option>
+                    <option id="option" value="polyvalent">
+                      Polyvalent
+                    </option>
+                  </Select>
+                </FormControl>
                 <Stack spacing={14}>
+                  <Stack
+                    direction={{ base: "column", sm: "row" }}
+                    align={"start"}
+                    justify={"space-between"}
+                  ></Stack>
                   <Button
                     type="submit"
                     value="Register"

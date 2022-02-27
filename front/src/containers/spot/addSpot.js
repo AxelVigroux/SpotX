@@ -2,7 +2,7 @@ import { Flex, useColorModeValue } from "@chakra-ui/react";
 
 import FormAddSpot from "../../components/Forms/FormAddSpot";
 
-const AddSpot = (props) => {
+const AddSpot = () => {
   return (
     <Flex
       minH={"100vh"}

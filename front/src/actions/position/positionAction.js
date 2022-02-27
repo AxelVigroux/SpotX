@@ -1,10 +1,10 @@
-import { GET_MY_POSITION } from "./actions-types"
+import { GET_MY_POSITION } from "./actions-types";
 
-export const get_my_position = (position) => {
+export const getMyPosition = (position) => {
   return function (dispatch) {
     dispatch({
       type: GET_MY_POSITION,
       payload: position,
-    })
-  }
-}
+    });
+  };
+};

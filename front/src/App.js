@@ -6,7 +6,6 @@ import HomePage from "./containers/homePage";
 import Register from "./containers/users/register";
 import Login from "./containers/users/login";
 import AddSpot from "./containers/spot/addSpot";
-// import Cloudinary from "./components/Cloudinary";
 
 function App() {
   return (
@@ -17,7 +16,6 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/addSpot" element={<AddSpot />} />
-        {/* <Route path="/cloud" element={<Cloudinary />} /> */}
       </Routes>
     </div>
   );
