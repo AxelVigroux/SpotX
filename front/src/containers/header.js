@@ -4,23 +4,18 @@ import {
   Box,
   Flex,
   HStack,
-  Link,
   IconButton,
   useDisclosure,
   Stack,
+  Link,
 } from "@chakra-ui/react";
 
-import {
-  HamburgerIcon,
-  CloseIcon,
-  AddIcon,
-  InfoIcon,
-  SearchIcon,
-} from "@chakra-ui/icons";
+import { HamburgerIcon, CloseIcon, AddIcon, InfoIcon } from "@chakra-ui/icons";
 
-const NavLink = ({ children }) => (
+const NavLink = ({ children, href, color, fontSize }) => (
   <Link
-    color="white"
+    fontSize={fontSize}
+    color={color}
     px={2}
     py={1}
     rounded={"md"}
@@ -28,6 +23,7 @@ const NavLink = ({ children }) => (
       textDecoration: "none",
       bg: "black",
     }}
+    href={href}
   >
     {children}
   </Link>
@@ -53,16 +49,21 @@ const NavBar = (props) => {
           onClick={isOpen ? onClose : onOpen}
         />
         <HStack spacing={8} alignItems={"center"}>
-          <Box color="primary.500" fontSize="4xl">
-            SpotX
+          <Box>
+            <NavLink color="primary.500" fontSize="4xl" href={"/"}>
+              SpotX
+            </NavLink>
           </Box>
           <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
             {props.user.isLogged ? (
-              <NavLink>Mon profil</NavLink>
+              <NavLink color={"white"} href={"addSpot"}>
+                Ajoute un spot
+              </NavLink>
             ) : (
-              <NavLink>Connecte toi</NavLink>
+              <NavLink color={"white"} href="login">
+                Connecte toi
+              </NavLink>
             )}
-            <NavLink>Ajoute un spot</NavLink>
           </HStack>
         </HStack>
       </Flex>
@@ -71,27 +72,18 @@ const NavBar = (props) => {
         <Box pb={4} display={{ md: "none" }}>
           <Stack as={"nav"} spacing={4}>
             {props.user.isLogged ? (
-              <NavLink>
+              <NavLink color={"white"} href="addSpot">
                 {" "}
-                <InfoIcon m={2} />
-                Mon profile
+                <AddIcon m={2} />
+                Ajoute un spot
               </NavLink>
             ) : (
-              <NavLink>
+              <NavLink color={"white"} href="login">
                 {" "}
                 <InfoIcon m={2} />
                 Connecte toi
               </NavLink>
             )}
-            ;
-            <NavLink>
-              <AddIcon m={2} />
-              Ajoute un spot
-            </NavLink>
-            <NavLink>
-              <SearchIcon m={2} />
-              Trouve un spot
-            </NavLink>
           </Stack>
         </Box>
       ) : null}

@@ -1,5 +1,8 @@
 import { extendTheme } from "@chakra-ui/react";
 
+const fonts = {
+  body: "Poppins, sans-serif",
+};
 const colors = {
   primary: {
     300: "#FF8591",
@@ -10,6 +13,6 @@ const colors = {
   gray: "#2d3748",
 };
 
-const customTheme = extendTheme({ colors });
+const customTheme = extendTheme({ colors, fonts });
 
 export default customTheme;

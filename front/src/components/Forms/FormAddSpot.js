@@ -141,10 +141,7 @@ const FormAddSpot = (props) => {
                       Street
                     </option>
                     <option id="option" value="courbe">
-                      Courbe
-                    </option>
-                    <option id="option" value="polyvalent">
-                      Polyvalent
+                      Skatepark
                     </option>
                   </Select>
                 </FormControl>

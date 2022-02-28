@@ -34,9 +34,6 @@ const Map = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllSpots());
-    setMarkers(props.spots.spots);
-
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         let coords = {
@@ -49,20 +46,9 @@ const Map = (props) => {
     } else {
       console.log("Ton navigateur ne supporte pas la géolocalisation");
     }
+    dispatch(getAllSpots());
+    setMarkers(props.spots.spots);
   }, []);
-
-  console.log("MARKERSSS", markers);
-
-  // FONCTION QUI PERMET D'AJOUTER UN PIN SUR LA MAP
-  // const onMapClick = useCallback((event) => {
-  //   setMarkers((current) => [
-  //     ...current,
-  //     {
-  //       lat: event.latLng.lat(),
-  //       lng: event.latLng.lng(),
-  //     },
-  //   ]);
-  // }, []);
 
   const mapRef = useRef();
   const onMapLoad = useCallback((map) => {
@@ -78,8 +64,6 @@ const Map = (props) => {
       zoom={10}
       center={center}
       options={options}
-      // AJOUT DU PIN
-      // onClick={onMapClick}
       onLoad={onMapLoad}
     >
       <Marker position={center} icon={myPos} />

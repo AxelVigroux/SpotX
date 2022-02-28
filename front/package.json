@@ -7,6 +7,8 @@
     "@chakra-ui/react": "^1.7.4",
     "@cloudinary/react": "^1.1.0",
     "@cloudinary/url-gen": "^1.6.0",
+    "@fontsource/open-sans": "^4.5.5",
+    "@fontsource/raleway": "^4.5.3",
     "@react-google-maps/api": "^2.7.0",
     "@reduxjs/toolkit": "^1.7.2",
     "@testing-library/jest-dom": "^5.16.1",
