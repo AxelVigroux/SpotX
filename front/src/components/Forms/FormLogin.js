@@ -35,7 +35,6 @@ const FormLogin = (props) => {
       if (response.status === 200) {
         window.localStorage.setItem("user_token", response.data.token);
         props.logged_in_user(response.data.user);
-        props.user_get_position(props.position.coords);
         navigate("/");
       }
     });

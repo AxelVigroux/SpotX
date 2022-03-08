@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+// import { Link as ReachLink } from "@reach/router";
+import { Link as RRLink } from "react-router-dom";
 import {
   Box,
   Flex,
@@ -9,11 +11,12 @@ import {
   Stack,
   Link,
 } from "@chakra-ui/react";
-
 import { HamburgerIcon, CloseIcon, AddIcon, InfoIcon } from "@chakra-ui/icons";
 
-const NavLink = ({ children, href, color, fontSize }) => (
+const NavLink = ({ children, to, color, fontSize }) => (
   <Link
+    as={RRLink}
+    to={to}
     fontSize={fontSize}
     color={color}
     px={2}
@@ -23,7 +26,6 @@ const NavLink = ({ children, href, color, fontSize }) => (
       textDecoration: "none",
       bg: "black",
     }}
-    href={href}
   >
     {children}
   </Link>
@@ -50,17 +52,17 @@ const NavBar = (props) => {
         />
         <HStack spacing={8} alignItems={"center"}>
           <Box>
-            <NavLink color="primary.500" fontSize="4xl" href={"/"}>
+            <NavLink color="primary.500" fontSize="4xl" to="/">
               SpotX
             </NavLink>
           </Box>
           <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
             {props.user.isLogged ? (
-              <NavLink color={"white"} href={"addSpot"}>
+              <NavLink color={"white"} to="/addSpot">
                 Ajoute un spot
               </NavLink>
             ) : (
-              <NavLink color={"white"} href="login">
+              <NavLink color={"white"} to="/login">
                 Connecte toi
               </NavLink>
             )}
@@ -72,13 +74,13 @@ const NavBar = (props) => {
         <Box pb={4} display={{ md: "none" }}>
           <Stack as={"nav"} spacing={4}>
             {props.user.isLogged ? (
-              <NavLink color={"white"} href="addSpot">
+              <NavLink color={"white"} to="/addSpot">
                 {" "}
                 <AddIcon m={2} />
                 Ajoute un spot
               </NavLink>
             ) : (
-              <NavLink color={"white"} href="login">
+              <NavLink color={"white"} to="/login">
                 {" "}
                 <InfoIcon m={2} />
                 Connecte toi

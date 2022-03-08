@@ -1,14 +1,13 @@
 import { React, useCallback, useState, useRef, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
-import { getMyPosition } from "../actions/position/positionAction";
-import { getAllSpots } from "../actions/spots/spotAction";
 import {
   GoogleMap,
   useLoadScript,
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
+import { Box } from "@chakra-ui/react";
 import myPos from "../assets/mypos.png";
+import useFetch from "../hooks/useFetch";
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -26,12 +25,20 @@ const Map = (props) => {
   const [selected, setSelected] = useState(null);
   const [center, setCenter] = useState("");
 
+  const { data, loading, error } = useFetch("/spot/all", {
+    method: "GET",
+  });
+
+  useEffect(() => {
+    if (data) {
+      setMarkers(data.spots);
+    }
+  }, [data]);
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
     libraries,
   });
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -41,13 +48,10 @@ const Map = (props) => {
           lng: parseFloat(position.coords.longitude),
         };
         setCenter(coords);
-        props.getMyPosition(coords);
       });
     } else {
       console.log("Ton navigateur ne supporte pas la géolocalisation");
     }
-    dispatch(getAllSpots());
-    setMarkers(props.spots.spots);
   }, []);
 
   const mapRef = useRef();
@@ -102,15 +106,4 @@ const Map = (props) => {
   );
 };
 
-const mapStateToProps = (store) => {
-  return {
-    spots: store.spots,
-  };
-};
-
-const mapDispatchToProps = {
-  getMyPosition,
-  getAllSpots,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Map);
+export default Map;

@@ -8,5 +8,6 @@ const auth = require("../utils/auth");
 router.post("/register", userController.register);
 router.post("/login", userController.login);
 router.put("/edit/:id", auth, userController.edit);
+router.get("/me", auth, userController.me);
 
 module.exports = router;

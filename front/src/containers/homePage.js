@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Box, Flex, Button } from "@chakra-ui/react";
 import Map from "../components/Map";
 
@@ -33,15 +33,14 @@ const HomePage = (props) => {
           </Button>
         ) : (
           <Button
+            as={Link}
+            to="/login"
             size="md"
             width={"100%"}
             mt={5}
             bg="primary.500"
             color="white"
             rounded={"full"}
-            onClick={() => {
-              navigate("/login");
-            }}
           >
             Connecte toi !
           </Button>

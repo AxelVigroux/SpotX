@@ -4,9 +4,9 @@ import FormLogin from "../../components/Forms/FormLogin";
 const Login = (props) => {
   return (
     <Flex
-      minH={"100vh"}
-      align={"center"}
-      justify={"center"}
+      minH="100vh"
+      align="center"
+      justify="center"
       bg={useColorModeValue("black")}
       color="white"
     >

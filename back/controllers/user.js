@@ -50,3 +50,9 @@ exports.edit = (req, res, next) => {
     .then(() => res.status(200).json({ message: "Utilisateur modifié !" }))
     .catch((error) => res.status(400).json({ error }));
 };
+
+exports.me = (req, res) => {
+  User.findOne({ _id: req.id }).then((user) => {
+    res.status(200).json(user);
+  });
+};
